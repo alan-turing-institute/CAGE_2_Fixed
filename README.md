@@ -34,11 +34,19 @@ Help from Harry - again the noteworthy thing here is that you can only access th
 
 ### Action Space
 
+**Method of taking actions**
+
 The way actions are taken is not immediately clear. However, on examination it seems as though both the red and blue agents take an action in a single turn both based on the outcome of the state prior to the step.
 
 First the red agent takes an action based on the observation of s_, then the blue agent take an action also based on s_ with no knowledge of the red action that’s just been decided. This means that the blue agent wastes a step potentially as it doesn’t see the outcome of the red action until the next step, where the red could do something like DRS and get a foothold in the next subnet. 
 
-It seems like when actions happen which would result in a conflicting observation space after the step, the blue agent’s action is prioritised. An example is if the red agent tries to privilege escalate a host but the blue agent decides to restore that same host in the same time step. These are mutually exclusive actions but they could both be possible to do according to s_, but we can’t have a host that is both fully compromised and restored, so Blue’s restore action will take priority in a case like this.
+It seems like when actions happen which would result in a conflicting observation space after the step, the blue agent’s action is prioritised. An example is if the red agent tries to privilege escalate a host but the blue agent decides to restore that same host in the same time step. These are mutually exclusive actions but they could both be possible to do according to s_, but we can’t have a host that is both fully compromised and restored, so Blue’s restore action will take priority in a case like this. 
+
+**The remove action**
+
+The remove action was always returned as a successful action, despite whether it actually was or not (see issue 1 in [Debugged Version of CAGE 2 CybORG](*CAGE_2_Fixed/Debugged_CybORG*) - this was fixed). 
+
+Another intricacy with the remove action seems to be with it only working for specific exploits on specific hosts. This is because the remove action only work if the usernames associated with the ports the exploits were occurring on were ‘root’ or ‘SYSTEM’ then the remove action would fail. This was the case for some exploits, so this means that remove will not always work for every exploit on every host. This may not be a bug, more of feature of the system. But we feel it is still worth mentioning to help understand any behaviour that may not make sense otherwise.
 
 *** Look at Developer_guide file to see if more issue arise from reading.
 
