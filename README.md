@@ -10,6 +10,36 @@ This repository contains:
 
 ### Additional Information about CAGE 2 Challenge Environment
 
+Here we are outlining various things we learnt from using this version of CybORG for the Cage 2 challenge task. 
+
+The following info is to the best of our knowledge, and if there are intricacies that we have missed or miswritten then please feel free to contact either of this Repo’s owners and we will discuss and update.
+
+### **True Network Diagram**
+
+Liz’s new diagram to go here.
+
+**B-line Agent Trajectory**
+
+The B-line agent moves through the network with domain knowledge of the network already, so it is aware of how to migrate to the Operational Server and impact in the quickest number of steps. 
+
+The B-line red agent will start from one of the user host machines 1-4. There is a fifth user host (user host 0) but this cannot be acted upon from the blue agent, it seems this is how the red agent will always have a foothold on the user subnet. If the red agent attacks (DNS, exploits and privilege escalates) a user machines 1 or 2 successfully then it will move to Enterprise host 1.  If the red agent attacks (DNS, exploits and privilege escalates) user machines 3 or 4 successfully then it will move to Enterprise host 0. From here, the b-line agent is able to move to Enterprise host 2 (from either Enterprise host 0 or 1), given another successful attack. Once at Enterprise host 2, it can then directly access the Operational Server if the attack is successful and then begin Impacting this host, causing the -10 penalty for the blue agent. 
+
+This red behaviour pattern can be seen in the scenario.yaml files and [b-line.py](http://b-line.py) files. You are able to see the information each host has access to, and also what kind of machines they are (linux or windows).
+
+It’s of note here that the Operational hosts 0, 1 and 2 are never interacted with at all.
+
+**Meander Agent Trajectory**
+
+Help from Harry - again the noteworthy thing here is that you can only access the operational hosts after reaching the operational server so they are again useless.
+
+### Action Space
+
+The way actions are taken is not immediately clear. However, on examination it seems as though both the red and blue agents take an action in a single turn both based on the outcome of the state prior to the step.
+
+First the red agent takes an action based on the observation of s_, then the blue agent take an action also based on s_ with no knowledge of the red action that’s just been decided. This means that the blue agent wastes a step potentially as it doesn’t see the outcome of the red action until the next step, where the red could do something like DRS and get a foothold in the next subnet. 
+
+It seems like when actions happen which would result in a conflicting observation space after the step, the blue agent’s action is prioritised. An example is if the red agent tries to privilege escalate a host but the blue agent decides to restore that same host in the same time step. These are mutually exclusive actions but they could both be possible to do according to s_, but we can’t have a host that is both fully compromised and restored, so Blue’s restore action will take priority in a case like this.
+
 *** Look at Developer_guide file to see if more issue arise from reading.
 
 - True network diagram
