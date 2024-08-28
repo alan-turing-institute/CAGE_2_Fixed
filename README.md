@@ -52,20 +52,21 @@ Another intricacy with the remove action seems to be with it only working for sp
 
 ## Decoy Deployment Strategy
 
-| Host     | OS      | Local Ports                        | Decoys                   | Decoy Order                                          | Initial Exploit Order                               |
-|----------|---------|------------------------------------|--------------------------|-----------------------------------------------------|-----------------------------------------------------|
-| **User0** | Windows | 21, 22                             | Apache,<br>Smss,<br>Svchost,<br>Tomcat  | 1. Svchost - 1 <br> 2. Smss - 2 <br> 3. Apache - 3 <br> 4. Tomcat - 4 | FTPDirTraversal (port 21) : 7 <br> SSHBruteForce (port 22) : 0.1 |
-| **User1** | Windows | 21, 22                             | Apache,<br>Smss,<br>Svchost,<br>Tomcat  | 1. Svchost - 1 <br> 2. Smss - 2 <br> 3. Apache - 3 <br> 4. Tomcat - 4 | FTPDirTraversal (port 21) : 7 <br> SSHBruteForce (port 22) : 0.1 |
-| **User2** | Windows | 445, 139, 135, 3389                | Apache,<br>SSHd,<br>Tomcat,<br>Fermitter  | 1. SSHd - 0.1 <br> 2. Apache - 3 <br> 3. Tomcat - 4 <br> 4. Fermitter - 7 | EternalBlue (port 139) : 2 <br> BlueKeep (port 3389) : 1 |
-| **User3** | Linux   | 25, 80, 443, 3390                  | SSHd,<br>Vsftpd           | 1. SSHd - 0.1 <br> 2. Vsftpd - 7                     | HarakaRCE (port 25) : 6 <br> SQLInjection (port 3390 and 80/443) : 5 <br> HTTPsRFI (port 443) : 4 <br> HTTPRFI (port 80) : 3 <br> BlueKeep (port 3389) : 1 |
-| **User4** | Linux   | 22, 80, 3390, 443, 25              | Vsftpd                    | 1. Vsftpd - 7                                        | HarakaRCE (port 25) : 6 <br> SQLInjection (port 3390 and 80/443) : 5 <br> HTTPsRFI (port 443) : 4 <br> HTTPRFI (port 80) : 3 <br> BlueKeep (port 3389) : 1 |
-| **Ent0** | Linux   | 22                                 | Apache,<br>Tomcat,<br>Vsftpd,<br>HarakaSMPT | 1. Apache - 3 <br> 2. Tomcat - 4 <br> 3. Vsftpd - 7 <br> 4. HarakaSMPT - 6 | SSHBruteForce (port 22) : 0.1 |
-| **Ent1** | Windows | 22, 135, 3389, 445, 139, 80, 443   | Fermitter                 | 1. Fermitter - 7                                      | HTTPsRFI (port 443) : 4 <br> HTTPRFI (port 80) : 3 <br> EternalBlue (port 139) : 2 <br> BlueKeep (port 3389) : 1 <br> SSHBruteForce (port 22) : 0.1 |
-| **Ent2** | Windows | 22, 135, 3389, 445, 139, 80, 443   | Fermitter                 | 1. Fermitter - 7                                      | SSHBruteForce (port 22) : 0.1 |
-| **Op_host0** | Linux| 22                                 | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
-| **Op_host1** | Linux| 22                                 | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
-| **Op_host2** | Linux| 22                                 | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
-| **Op_Server0** | Linux| 22                               | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
+| Host     | OS      | Local Ports                  | Decoys                   | Decoy Order                                          | Initial Exploit Order                               |
+|----------|---------|-----------------------------|--------------------------|-----------------------------------------------------|-----------------------------------------------------|
+| **User0** | Windows | 21,<br>22                    | Apache,<br>Smss,<br>Svchost,<br>Tomcat  | 1. Svchost - 1 <br> 2. Smss - 2 <br> 3. Apache - 3 <br> 4. Tomcat - 4 | FTPDirTraversal (port 21) : 7 <br> SSHBruteForce (port 22) : 0.1 |
+| **User1** | Windows | 21,<br>22                    | Apache,<br>Smss,<br>Svchost,<br>Tomcat  | 1. Svchost - 1 <br> 2. Smss - 2 <br> 3. Apache - 3 <br> 4. Tomcat - 4 | FTPDirTraversal (port 21) : 7 <br> SSHBruteForce (port 22) : 0.1 |
+| **User2** | Windows | 445,<br>139,<br>135,<br>3389 | Apache,<br>SSHd,<br>Tomcat,<br>Fermitter  | 1. SSHd - 0.1 <br> 2. Apache - 3 <br> 3. Tomcat - 4 <br> 4. Fermitter - 7 | EternalBlue (port 139) : 2 <br> BlueKeep (port 3389) : 1 |
+| **User3** | Linux   | 25,<br>80,<br>443,<br>3390   | SSHd,<br>Vsftpd           | 1. SSHd - 0.1 <br> 2. Vsftpd - 7                     | HarakaRCE (port 25) : 6 <br> SQLInjection (port 3390 and 80/443) : 5 <br> HTTPsRFI (port 443) : 4 <br> HTTPRFI (port 80) : 3 <br> BlueKeep (port 3389) : 1 |
+| **User4** | Linux   | 22,<br>80,<br>3390,<br>443,<br>25 | Vsftpd                    | 1. Vsftpd - 7                                        | HarakaRCE (port 25) : 6 <br> SQLInjection (port 3390 and 80/443) : 5 <br> HTTPsRFI (port 443) : 4 <br> HTTPRFI (port 80) : 3 <br> BlueKeep (port 3389) : 1 |
+| **Ent0** | Linux   | 22                          | Apache,<br>Tomcat,<br>Vsftpd,<br>HarakaSMPT | 1. Apache - 3 <br> 2. Tomcat - 4 <br> 3. Vsftpd - 7 <br> 4. HarakaSMPT - 6 | SSHBruteForce (port 22) : 0.1 |
+| **Ent1** | Windows | 22,<br>135,<br>3389,<br>445,<br>139,<br>80,<br>443 | Fermitter                 | 1. Fermitter - 7                                      | HTTPsRFI (port 443) : 4 <br> HTTPRFI (port 80) : 3 <br> EternalBlue (port 139) : 2 <br> BlueKeep (port 3389) : 1 <br> SSHBruteForce (port 22) : 0.1 |
+| **Ent2** | Windows | 22,<br>135,<br>3389,<br>445,<br>139,<br>80,<br>443 | Fermitter                 | 1. Fermitter - 7                                      | SSHBruteForce (port 22) : 0.1 |
+| **Op_host0** | Linux| 22                          | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
+| **Op_host1** | Linux| 22                          | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
+| **Op_host2** | Linux| 22                          | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
+| **Op_Server0** | Linux| 22                        | Apache,<br>HarakaSMPT,<br>Tomcat,<br>Vsftpd | 1. Vsftpd - 7 <br> 2. HarakaSMPT - 6 <br> 3. Tomcat - 4 <br> 4. Apache - 3 | SSHBruteForce (port 22) : 0.1 |
+
 
 ####################
 
