@@ -16,14 +16,12 @@ The following info is to the best of our knowledge, and if there are intricacies
 
 ### **True Network Diagram**
 
-<div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+<div style="text-align: center;">
   <figure>
-    <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="500"/>
+    <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="400"/>
     <figcaption>Figure 1: CAGE2 CybORG Network Diagram</figcaption>
   </figure>
 </div>
-
-
 
 
 **B-line Agent Trajectory**
