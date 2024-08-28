@@ -17,7 +17,7 @@ The following info is to the best of our knowledge, and if there are intricacies
 ### **True Network Diagram**
 
 <p align="center">
-    <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="400"/>
+    <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="550"/>
     <figcaption style="text-align: center;"><em>Figure 1: CAGE2 CybORG Network Diagram</em></figcaption>
 </p>
 
