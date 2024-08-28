@@ -17,11 +17,11 @@ The following info is to the best of our knowledge, and if there are intricacies
 ### **True Network Diagram**
 
 <p align="center">
+  <figure style="display: inline-block; text-align: center;">
     <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="400"/>
-    <figcaption>Figure 1: CAGE2 CybORG Network Diagram</figcaption>
-< /p>
-
-
+    <figcaption style="text-align: center;">Figure 1: CAGE2 CybORG Network Diagram</figcaption>
+  </figure>
+</p>
 
 **B-line Agent Trajectory**
 
