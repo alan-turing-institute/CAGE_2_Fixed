@@ -106,7 +106,7 @@ HOST_DECOYS = [
 EXPLOITS = ['FTP', 'Haraka', 'SQL', 'HTTPSRFI', 'HTTPRFI', 'Eternal', 'Keep', 'Brute'] 
 DECOYS = ['Femitter', 'Vsftpd', 'Apache', 'Haraka', 'SSHD', 'SMSS', 'Tomcat', 'Svchost']
 
-def exploits_to_decoys():
+def exploits_to_decoys(remove_bugs):
     '''Give an exploit index and return the compatible decoys.'''
 
     ######################################################
@@ -114,14 +114,21 @@ def exploits_to_decoys():
     # -> so in fact it actually stops HTTPRFI
     # -> it basically deploying an apache server instead
     ######################################################
+    ftp_decoys = [0]
+    sql_decoys = [2, 6, 1]
+    httprfi_decoys = [2, 1]
+    if remove_bugs:
+        ftp_decoys = [0, 1]
+        sql_decoys = [2, 6]
+        httprfi_decoys = [2]
 
     # maps the exploit to the decoys that can stop it
     mapping = np.zeros((len(EXPLOITS), len(DECOYS)))
-    mapping[0, [0]] = 1         # FTP       ->  Femitter (-Vsftp)
+    mapping[0, ftp_decoys] = 1         # FTP       ->  Femitter (-Vsftp)
     mapping[1, [3]] = 1         # Haraka    ->  Haraka
-    mapping[2, [2, 6, 1]] = 1   # SQL       ->  Apache, Tomcat (+Vsftp)
+    mapping[2, sql_decoys] = 1   # SQL       ->  Apache, Tomcat (+Vsftp)
     mapping[3, [6]] = 1         # HTTPSRFI  ->  Tomcat
-    mapping[4, [2, 1]] = 1      # HTTPRFI   ->  Apache (+ Vsftp)
+    mapping[4, httprfi_decoys] = 1      # HTTPRFI   ->  Apache (+ Vsftp)
     mapping[5, [5]] = 1         # Eternal   ->  SMSS
     mapping[6, [7]] = 1         # Keep      ->  Svchost
     mapping[7, [4]] = 1         # Brute     ->  SSHD
@@ -178,10 +185,16 @@ def get_host_priority(hosts):
 
 # --------------------------------------------------------------------------------------------
 
-def default_host_exploits():
+def default_host_exploits(remove_bug=False):
     '''Get the default exploits for each network host.'''
     mapping = np.zeros((len(HOST_EXPLOITS), len(EXPLOITS)))
-    for i, host in enumerate(HOST_EXPLOITS):
+    
+    # add in SQL exploit on user3
+    host_exploits = HOST_EXPLOITS
+    if remove_bug:
+        host_exploits[11].append('SQL')
+
+    for i, host in enumerate(host_exploits):
         for _, exploit in enumerate(host):
             mapping[i][EXPLOITS.index(exploit)] = 1
     return mapping
@@ -321,7 +334,7 @@ def get_possible_red_actions(
 
 test = np.zeros(3)
 
-def update_red(state, action, subnet_loc, processes, impacted, femitter_placed):
+def update_red(state, action, subnet_loc, processes, impacted, femitter_placed, remove_bug=False):
     '''
     Update the environmental state following a red action.
     '''
@@ -411,7 +424,7 @@ def update_red(state, action, subnet_loc, processes, impacted, femitter_placed):
 
                 # add femitter if previously placed
                 fem_on_host = femitter_placed[np.arange(len(host_alloc)), host_alloc]
-                if np.any(fem_on_host[valid]):
+                if np.any(fem_on_host[valid]) and (not remove_bug):
                     host_processes[fem_on_host[valid], 0] = -1
 
                 priority_idx = np.argmax(host_processes != 0, axis=-1).reshape(-1)
@@ -463,11 +476,12 @@ def update_red(state, action, subnet_loc, processes, impacted, femitter_placed):
                 ######################################
                 # BUG: bluekeep always fails on user3
                 ######################################
-                blue_u3 = np.zeros((valid.shape[0])).astype(bool)
-                blue_u3[valid] = np.invert(np.logical_and(
-                    selected_idx == 6, host == 11))
-                exploit_success = np.logical_and(exploit_success, blue_u3)
-                
+                if (not remove_bug):
+                    blue_u3 = np.zeros((valid.shape[0])).astype(bool)
+                    blue_u3[valid] = np.invert(np.logical_and(
+                        selected_idx == 6, host == 11))
+                    exploit_success = np.logical_and(exploit_success, blue_u3)
+                    
                 # add exploits
                 old_valid = valid.copy()
                 valid = np.logical_and(valid, exploit_success)
@@ -773,11 +787,12 @@ class SimplifiedCAGE:
     A simplified version of the CAGE 2 Challenge environment 
     with faster execution speed and parallelism.
     '''
-    def __init__(self, num_envs, num_nodes=13):
+    def __init__(self, num_envs, num_nodes=13, remove_bugs=False):
 
         # basic parameters
         self.num_envs = num_envs
         self.num_nodes = num_nodes
+        self.remove_bugs = remove_bugs
 
         # map integer in host_alloc[valid] exes to action name
         self.action_mapping = action_mapping()
@@ -801,8 +816,8 @@ class SimplifiedCAGE:
         # -> given exploit index return compatible decoys
         # -> for each host return built in exploits
         # -> for each host return compatible decoys
-        self.exploit_map = exploits_to_decoys()
-        self.default_exploits = default_host_exploits()
+        self.exploit_map = exploits_to_decoys(remove_bug=self.remove_bugs)
+        self.default_exploits = default_host_exploits(remove_bug=self.remove_bugs)
         self.default_decoys = np.tile(
             np.expand_dims(default_defender_decoys(),
             axis=0), (self.num_envs, 1, 1))
@@ -857,9 +872,7 @@ class SimplifiedCAGE:
             construct_exploit_rew()[None], (num_envs, 1, 1))
         self.host_exploits = -np.ones((num_envs, num_nodes)) 
 
-        #######################################################
-        # BUG: once femitter is placed it can never be removed
-        #######################################################
+        # in bugged version femitter is stuck after being placed
         self.femitter_placed = np.zeros((
             num_envs, num_nodes)).astype(bool)
 
@@ -949,7 +962,8 @@ class SimplifiedCAGE:
             state=state, action=red_action, subnet_loc=subnets, 
             processes=self.current_processes, 
             impacted=self.impacted,
-            femitter_placed=self.femitter_placed)
+            femitter_placed=self.femitter_placed,
+            remove_bug=self.remove_bugs)
         self.red_success = success
         self.selected_exploit = selected_exploit
 
@@ -1186,17 +1200,17 @@ class SimplifiedCAGE:
             exploit_mask = np.random.choice([0, 1], size=scan.shape[0], p=[0.05, 0.95])
             green_scanning = (selected_green_host == host_alloc).reshape(-1)
             ssh_selected = self.selected_exploit == (len(EXPLOITS)-1)
-
+            detected = np.logical_and(
+                np.logical_or(exploit_mask, ssh_selected), np.invert(green_scanning))
+            
             #####################################################
             # BUG: if host is ent0 -> always visible exploit
             # -> but undetectable if there is a decoy on host
             #####################################################
             decoys_on_ent0 = np.any(self.current_processes[:, 1] == -1, axis=-1)
             ent0_detected = np.logical_and((host_alloc == 1), np.invert(decoys_on_ent0))
-
-            detected = np.logical_and(
-                np.logical_or(exploit_mask, ssh_selected), np.invert(green_scanning))
-            detected = np.logical_or(detected, ent0_detected)
+            if not self.remove_bugs:
+                detected = np.logical_or(detected, ent0_detected)
             exploit = np.logical_and(exploit, detected)
 
             # add action success
