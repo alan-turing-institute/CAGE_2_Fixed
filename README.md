@@ -27,8 +27,8 @@ The B-line agent moves through the network with domain knowledge of the network 
 
 The B-line red agent will start from one of the user host machines 1-4. There is a fifth user host (user host 0) but this cannot be acted upon from the blue agent, it seems this is how the red agent will always have a foothold on the user subnet. If the red agent attacks (DNS, exploits and privilege escalates) a user machines 1 or 2 successfully then it will move to Enterprise host 1.  If the red agent attacks (DNS, exploits and privilege escalates) user machines 3 or 4 successfully then it will move to Enterprise host 0. From here, the b-line agent is able to move to Enterprise host 2 (from either Enterprise host 0 or 1), given another successful attack. Once at Enterprise host 2, it can then directly access the Operational Server if the attack is successful and then begin Impacting this host, causing the -10 penalty for the blue agent. 
 
-This red behaviour pattern can be seen in the scenario.yaml files and [b-line.py](http://b-line.py) files. You are able to see the information each host has access to, and also what kind of machines they are (linux or windows).
-
+This red behaviour pattern can be seen in the [scenario2.yaml](./Debugged_CybORG/CybORG/CybORG/Shared/Scenarios/Scenario2.yaml) file and [b_line.py](.
+/Debugged_CybORG/CybORG/CybORG/Agents/SimpleAgents/B_line.py) files. You are able to see the information each host has access to, and also what kind of machines they are (linux or windows).
 It’s of note here that the Operational hosts 0, 1 and 2 are never interacted with at all.
 
 **Meander Agent Trajectory**
