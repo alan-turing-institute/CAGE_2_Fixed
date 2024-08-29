@@ -37,6 +37,12 @@ class PwnRewardCalculator(RewardCalculator):
         root_sessions = 0
         system_sessions = 0
         self.compromised_hosts = {}
+
+        ########################################################
+        # NOTE: bug fixed -> create consistent reward behaviour
+        ########################################################
+        usernames = ['NetworkService', 'vagrant', 'root', 'SYSTEM', 'pi', 'www-data']
+        
         for host, info in current_state.items():
             if host == 'success':
                 continue
@@ -45,14 +51,14 @@ class PwnRewardCalculator(RewardCalculator):
                 for session in info['Sessions']:
                     if session['Agent'] == self.agent_name:
                         # count the number of root sessions
-                        if session['Username'] == 'root' and info['System info']['OSType'] == OperatingSystemType.LINUX:
+                        if session['Username'] in usernames and info['System info']['OSType'] == OperatingSystemType.LINUX:
                             confidentiality_value = self.mapping[self.scenario.get_host(host).get('ConfidentialityValue', 'Low')]
 
                             root_sessions += confidentiality_value
                             self.compromised_hosts[host] = confidentiality_value
                             break
                         # count the number of SYSTEM sessions
-                        if session['Username'] == 'SYSTEM' and info['System info']['OSType'] == OperatingSystemType.WINDOWS:
+                        if session['Username'] in usernames and info['System info']['OSType'] == OperatingSystemType.WINDOWS:
                             confidentiality_value = self.mapping[self.scenario.get_host(host).get('ConfidentialityValue', 'Low')]
                             system_sessions += confidentiality_value
                             self.compromised_hosts[host] = confidentiality_value

@@ -35,13 +35,17 @@ for i in range(100):
         blue_action=blue_action, red_action=red_action)
 ```
 
+# State-action space:
+
+[Fill this section in...]
+
 # Comparison:
 
 The environment is based off of the most up to date version of [CAGE 2](https://github.com/cage-challenge/CybORG/tree/cage-challenge-2). The introduced modifications are listed as follows:
 
 - **Red Agent Interface** - the environment can now be used to train both red and blue agents, having fixed the problems with the wrapper in original CAGE 2 implementation. 
 
-- **Port and IP Management** - individual hosts no longer contain IP or port information. Machines have pre-specified processeses running, furthermore exploits are mapped to their corresponding decoy processes rather than performing a check for port availability.
+- **Removal of Redundant Emulation Code** - originally the environment was designed with the expectation of extending the simulator for emulation purposes, however this created redundant code for simulator and therefore has been removed to improve efficiency.
 
 - **Wrappers** - the default state is given as a dictionary containing a vector for both the red and blue agent's observations. In this form it should be readily compatible with reinforcement learning agents.
 
