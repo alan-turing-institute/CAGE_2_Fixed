@@ -12,7 +12,25 @@ This repository contains:
 
 This guide extends the previous CAGE 2 developer guide, highlighting features of the environment that are useful for successful model implementation. 
 
+The following info is to the best of our knowledge, and if there are intricacies that we have missed or miswritten then please feel free to contact either of this Repo’s owners and we will discuss and update.
+
 ## Network Diagram
+
+### **True Network Diagram**
+
+<p align="center">
+    <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="550"/>
+    <figcaption style="text-align: center;"><em>Figure 1: CAGE2 CybORG Network Diagram</em></figcaption>
+</p>
+
+## CybORG Agents
+
+The red agents will start from one of the user host machines 1-4. There is a fifth user host (user host 0) but this cannot be acted upon from the blue agent, it seems this is how the red agent will always have a foothold on the user subnet. If the red agent attacks (DNS, exploits and privilege escalates) a user machines 1 or 2 successfully then it will move to Enterprise host 1.  If the red agent attacks (DNS, exploits and privilege escalates) user machines 3 or 4 successfully then it will move to Enterprise host 0. From here, the red agent is able to move to Enterprise host 2 (from either Enterprise host 0 or 1), given another successful attack. Once at Enterprise host 2, it can then directly access the Operational Server if the attack is successful and then begin Impacting this host, causing the -10 penalty for the blue agent. 
+This red behaviour pattern can be seen in the [scenario2.yaml](./Debugged_CybORG/CybORG/CybORG/Shared/Scenarios/Scenario2.yaml) file and [b_line.py](./Debugged_CybORG/CybORG/CybORG/Agents/SimpleAgents/B_line.py) files. You are able to see the information each host has access to, and also what kind of machines they are (linux or windows).
+
+The B-line agent moves through the network with domain knowledge of the network already, so it is aware of how to migrate to the Operational Server and impact in the quickest number of steps. 
+It’s of note here that the Operational hosts 0, 1 and 2 are never interacted with at all in the b-line agent trajectory since the operational server is always reached first, and this is the goal.
+The meander agent, on the other hand, prioritises exploring each subnet before moving into the next. The meander agent follows an action hierarchy of impact, scan subnet, scan host, escalate and exploit, and will always select actions with higher priority first. Similarly, within these categories actions that have been made available earliest will also be prioritised (i.e. if user1 is scanned first then this will be the first host to be exploited).   
 
 
 ## Action Space
@@ -23,62 +41,16 @@ The blue agent can take one of several actions in each timestep:
 - restore host - remove privliged users from a host
 - place a decoy - set-up a decoy service on a host. If selected the attacker's action will fail.
 
-
 One of the unique features of the CAGE 2 environment is that both agents take actions simultaneously, rather than sequentially. This means that to some degree an agent must attempt to anticipate the actions of its opponent, especially as some actions will have a nullifying effect if they occur at the same time. Below is a list of action priorities should they occur simultaneously:
 
 | Red Agent Action | Blue Agent Action | Priority |
 |------------------|-------------------|----------|
-| Escalate         | Remove            | Escalate |
-| Exploit          | Decoy             | Exploit  |
-| Exploit          | Restore           | Exploit  |
+| Escalate           | Remove            | Escalate |
+| Exploit            | Decoy             | Exploit  |
+| Exploit            | Restore           | Exploit  |
+| Privilege Escalate | Restore           | Restore  |
 
-## Observation Space
-
-The blue agent observation space is processed using the Wrappers available in [Wrappers](./Debugged_CybORG/CybORG/CybORG/Agents/Wrappers/) and the default wrapper is displayed in ChallengeWrapper.py. The blue agent observation has 52 features, with each four consecutive features corresponding to a single node in the network for a total of 13 nodes (in order: Def, Ent0, Ent1, Ent2, OpHost0, OpHost1, OpHost2, Opserver, User0, User1, User2, User3, User4). Each four feature can be one of five combinations describing the node's state:
-- [0, 0, 0, 0] = No activity detected on host
-- [1, 0, 0, 0] = Scan detected on host
-- [1, 0, 1, 1] = Exploit detected in previous turn
-- [0, 0, 1, 1] = Exploit detected in prior turns
-- [0, 0, 1, 0] = Remove action applied to host (does not indicate successful removal) 
-
-Scans and removal actions have 100% chance of being observed in the state, however for exploitation the probability is less clear. Exploitation actions have a 95% chance of being observed with a few exceptions (details for this can be found in [ExploitAction.py](./Debugged_CybORG/CybORG/CybORG/Shared/Actions/ConcreteActions/ExploitAction.py). SSHBruteForce always has a 100% chance of being observed, consequently an exploit on the OpServer, which can only be exploited using this method, will always be represented in the state. 
-
-## Reward Signal
-
-Reward is assigned based on three conditions: exploiting hosts, restoring hosts and impacting critical hosts. Each host is assigned a numeric value corresponding to its importance (ConfidentialityValue in [Scenario2.yaml](/home/harry/Documents/cyber/BlueTeam/CybORG/CybORG/Shared/Scenarios/Scenario2.yaml)). When a host is exploited this specifies the amount of reward provided: -0.1 for UserHosts and OpHosts, -1 for EntHosts and the OpServer. Using the restore action gives a reward of -1 regardless of which host it is applied to. The only host in which the impact action yields any reward is the OpServer. Allowing this host to be impacted results in a reward of -10. This reward persists until the operational server has been restored and need not be applied in every timestep as the logic of the pre-programmed agents may suggest. The total reward for each timestep is then the sum of exploited host rewards, hosts restored in that timestep and hosts currently being impacted. 
-
-
-## Appendix
-
-
-
-### Additional Information about CAGE 2 Challenge Environment
-
-Here we are outlining various things we learnt from using this version of CybORG for the Cage 2 challenge task. 
-
-The following info is to the best of our knowledge, and if there are intricacies that we have missed or miswritten then please feel free to contact either of this Repo’s owners and we will discuss and update.
-
-### **True Network Diagram**
-
-<p align="center">
-    <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="550"/>
-    <figcaption style="text-align: center;"><em>Figure 1: CAGE2 CybORG Network Diagram</em></figcaption>
-</p>
-
-**B-line Agent Trajectory**
-
-The B-line agent moves through the network with domain knowledge of the network already, so it is aware of how to migrate to the Operational Server and impact in the quickest number of steps. 
-
-The B-line red agent will start from one of the user host machines 1-4. There is a fifth user host (user host 0) but this cannot be acted upon from the blue agent, it seems this is how the red agent will always have a foothold on the user subnet. If the red agent attacks (DNS, exploits and privilege escalates) a user machines 1 or 2 successfully then it will move to Enterprise host 1.  If the red agent attacks (DNS, exploits and privilege escalates) user machines 3 or 4 successfully then it will move to Enterprise host 0. From here, the b-line agent is able to move to Enterprise host 2 (from either Enterprise host 0 or 1), given another successful attack. Once at Enterprise host 2, it can then directly access the Operational Server if the attack is successful and then begin Impacting this host, causing the -10 penalty for the blue agent. 
-
-This red behaviour pattern can be seen in the [scenario2.yaml](./Debugged_CybORG/CybORG/CybORG/Shared/Scenarios/Scenario2.yaml) file and [b_line.py](./Debugged_CybORG/CybORG/CybORG/Agents/SimpleAgents/B_line.py) files. You are able to see the information each host has access to, and also what kind of machines they are (linux or windows).
-It’s of note here that the Operational hosts 0, 1 and 2 are never interacted with at all.
-
-**Meander Agent Trajectory**
-
-Help from Harry - again the noteworthy thing here is that you can only access the operational hosts after reaching the operational server so they are again useless.
-
-### Action Space
+CHECK THIS
 
 **Method of taking actions**
 
@@ -88,7 +60,7 @@ First the red agent takes an action based on the observation of s_, then the blu
 
 It seems like when actions happen which would result in a conflicting observation space after the step, the blue agent’s action is prioritised. An example is if the red agent tries to privilege escalate a host but the blue agent decides to restore that same host in the same time step. These are mutually exclusive actions but they could both be possible to do according to s_, but we can’t have a host that is both fully compromised and restored, so Blue’s restore action will take priority in a case like this. 
 
-**The remove action**
+**The Remove Action**
 
 The remove action was always returned as a successful action, despite whether it actually was or not (see issue 1 in [Debugged Version of CAGE 2 CybORG](./Debugged_CybORG) - this was fixed). 
 
@@ -98,6 +70,28 @@ on were ‘root’ or ‘SYSTEM’ then the remove action would fail. This was t
 that remove will not always work for every exploit on every host. This may not be a bug, more of feature of the 
 system. But we feel it is still worth mentioning to help understand any behaviour that may not make sense otherwise. 
 The info in the Hosts to Default Processes,Ports and users Mapping Table in the Appendix may be of use if a remove action is not working as expected, as it may be due to the user being 'root' or 'SYSTEM' for that process on that port.
+
+
+## Observation Space
+
+The blue agent observation space is processed using the Wrappers available in [Wrappers](./Debugged_CybORG/CybORG/CybORG/Agents/Wrappers/) and the default wrapper is displayed in ChallengeWrapper.py. The blue agent observation has 52 features, with each four consecutive features corresponding to a single node in the network for a total of 13 nodes (in order: Def, Ent0, Ent1, Ent2, OpHost0, OpHost1, OpHost2, Opserver, User0, User1, User2, User3, User4). Each four feature can be one of five combinations describing the node's state:
+- [0, 0, 0, 0] = No activity detected on host
+- [1, 0, 0, 0] = Scan detected on host
+- [1, 0, 1, 1] = Exploit detected in previous turn
+- [0, 0, 1, 1] = Exploit detected in prior turns
+- [0, 0, 1, 0] = Remove action applied to host (does not indicate successful removal)
+
+- Double check.
+
+Scans and removal actions have 100% chance of being observed in the state, however for exploitation the probability is less clear. Exploitation actions have a 95% chance of being observed with a few exceptions (details for this can be found in [ExploitAction.py](./Debugged_CybORG/CybORG/CybORG/Shared/Actions/ConcreteActions/ExploitAction.py). SSHBruteForce always has a 100% chance of being observed, consequently an exploit on the OpServer, which can only be exploited using this method, will always be represented in the state. 
+
+- link bug fix above
+
+## Reward Signal
+
+Reward is assigned based on three conditions: exploiting hosts, restoring hosts and impacting critical hosts. Each host is assigned a numeric value corresponding to its importance (ConfidentialityValue in [Scenario2.yaml](/home/harry/Documents/cyber/BlueTeam/CybORG/CybORG/Shared/Scenarios/Scenario2.yaml)). When a host is exploited this specifies the amount of reward provided: -0.1 for UserHosts and OpHosts, -1 for EntHosts and the OpServer. Using the restore action gives a reward of -1 regardless of which host it is applied to. The only host in which the impact action yields any reward is the OpServer. Allowing this host to be impacted results in a reward of -10. This reward persists until the operational server has been restored and need not be applied in every timestep as the logic of the pre-programmed agents may suggest. The total reward for each timestep is then the sum of exploited host rewards, hosts restored in that timestep and hosts currently being impacted. 
+
+- Reference the bug fixes issue re the reward accumulation.
 
 ### Appendix
 
@@ -150,31 +144,3 @@ the `Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/ExploitRemoteS
 | Op_host1     | 22                 | ROOT               | SSHD                 |
 | Op_host2     | 22                 | ROOT               | SSHD                 |
 | Defender          | 22, 53, 78         | ROOT, SYSTEMD+     | SSHD, SYSTEMD        |
-
-####################
-
-*** Look at Developer_guide file to see if more issue arise from reading.
-
-- True network diagram
-    - Bline agent trajectory
-    - Meander agent trajectory
-- Actions:
-    - Method of taking actions (simultaneous)
-        - hierarchy of priority for mutually exclusive actions
-    - Talk about Remove (ref issue in my directory)
-        - what makes remove work
-    - Placing a decoy - ref decoy mapping table
-- Observation
-    - Vector obs space explanation - what do the bits mean?
-    - <95% visibility for blue agent usually
-    - All impacts and exploits are visible on the Obs server
-    - 100% of brute force exploits are visible
-- Rewards
-    - Confirm when you get the -10 reward
-    - How rewards accumulate
-
-- Appendix
-    - Decoy mapping table - hosts
-    - Exploits to decoy table
-    - Default process and ports
-    - Usernames and Password
