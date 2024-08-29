@@ -72,17 +72,16 @@ Another intricacy with the remove action seems to be with it only working for sp
 
 ### Exploits to decoy to process mapping table
 
-| **Exploits**              | **Decoys**        | **Processes** |
-|---------------------------|-------------------|--------------|
-| EternalBlue               | decoySmss         | smss.exe     |
-| BlueKeep                  | decoySvchost      | svchost.exe  |
-| HTTPRFI                   | decoyApache       | apache2      |
-| HTTPSRFI                  | decoyTomcat       | tomcat8.exe  |
-| SSH BruteForce            | decoySSHD         | sshd.exe/sshd |
-| SQL Injection             | -                 | mysql        |
-| Haraka RCE                | decoyHarakaSMTP   | smtp         |
-| FTP Directory Traversal   | decoyVsftpd       | femitter.exe |
-|                           | decoyFemitter     |              |
+| **Exploits**              | **Decoys**                       | **Processes** |
+|---------------------------|----------------------------------|--------------|
+| EternalBlue               | decoySmss                        | smss.exe     |
+| BlueKeep                  | decoySvchost                     | svchost.exe  |
+| HTTPRFI                   | decoyApache                      | apache2      |
+| HTTPSRFI                  | decoyTomcat                      | tomcat8.exe  |
+| SSH BruteForce            | decoySSHD                        | sshd.exe/sshd |
+| SQL Injection             | -                                | mysql        |
+| Haraka RCE                | decoyHarakaSMTP                  | smtp         |
+| FTP Directory Traversal   | decoyFemitter, <br/> decoyVsftpd | femitter.exe |
 
 ### Hosts to Default Processes,Ports and users Mapping Table
 
