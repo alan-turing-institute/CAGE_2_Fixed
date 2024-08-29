@@ -90,7 +90,7 @@ the `Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/ExploitRemoteS
 | Haraka RCE                | decoyHarakaSMTP                  | smtp         |
 | FTP Directory Traversal   | decoyFemitter, <br/> decoyVsftpd | femitter.exe |
 
-### Hosts to Default Processes,Ports and users Mapping Table
+### Hosts to Default Processes, Ports and users Mapping Table
 
 | **Hostname** | **Ports**          | **Users**          | **Processes**        |
 |-----------------------|--------------------|--------------------|----------------------|
