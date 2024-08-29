@@ -84,6 +84,23 @@ Another intricacy with the remove action seems to be with it only working for sp
 | FTP Directory Traversal   | decoyVsftpd       | femitter.exe |
 |                           | decoyFemitter     |              |
 
+### Hosts to Default Processes,Ports and users Mapping Table
+
+| **Hostname** | **Ports**          | **Users**          | **Processes**        |
+|-----------------------|--------------------|--------------------|----------------------|
+| User1           | 22, 21             | SSHD_SERVER, SYSTEM | SSHD.EXE, FEMITTER.EXE |
+| User2           | 445, 139, 135, 3389 | SYSTEM, SYSTEM, NETWORK | SMSS.EXE, SVCHOST.EXE, SVCHOST.EXE |
+| User3          | 3389, 80, 443, 25  | ROOT, WWW-DATA, ROOT | MYSQL, APACHE2, SMTP |
+| User4           | 22, 3390, 80, 443, 25 | ROOT, ROOT, WWW-DATA, ROOT | SSHD, MYSQL, APACHE2, SMTP |
+| Ent0       | 22                 | ROOT               | SSHD.EXE              |
+| Ent1       | 22, 135, 3389, 445, 139, 80, 443 | SSHD_SERVER, SYSTEM, SYSTEM, SYSTEM, NETWORK | SSHD.EXE, SVCHOST.EXE, SVCHOST.EXE, SMSS.EXE, TOMCAT8.EXE |
+| Ent2       | 22, 135, 3389, 445, 139, 80, 443 | SSHD_SERVER, SYSTEM, SYSTEM, SYSTEM, NETWORK | SSHD.EXE, SVCHOST.EXE, SVCHOST.EXE, SMSS.EXE, TOMCAT8.EXE |
+| Op_Server      | 22                 | ROOT               | SSHD                 |
+| Op_host0      | 22                 | ROOT               | SSHD                 |
+| Op_host1     | 22                 | ROOT               | SSHD                 |
+| Op_host2     | 22                 | ROOT               | SSHD                 |
+| Defender          | 22, 53, 78         | ROOT, SYSTEMD+     | SSHD, SYSTEMD        |
+
 ####################
 
 *** Look at Developer_guide file to see if more issue arise from reading.
