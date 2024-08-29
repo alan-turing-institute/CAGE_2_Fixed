@@ -53,7 +53,7 @@ Another intricacy with the remove action seems to be with it only working for sp
 
 ### Appendix
 
-## Decoy Deployment Strategy
+### Decoy Deployment Strategy
 
 | Host     | OS      | Local Ports                  | Decoys                     | Decoy Order                                                    | Initial Exploit Order                               |
 |----------|---------|-----------------------------|----------------------------|----------------------------------------------------------------|-----------------------------------------------------|
@@ -69,6 +69,20 @@ Another intricacy with the remove action seems to be with it only working for sp
 | **Op_host1** | Linux| 22                          | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
 | **Op_host2** | Linux| 22                          | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
 | **Op_Server0** | Linux| 22                        | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
+
+### Exploits to decoy to process mapping table
+
+| **Exploits**              | **Decoys**        | **Processes** |
+|---------------------------|-------------------|--------------|
+| EternalBlue               | decoySmss         | smss.exe     |
+| BlueKeep                  | decoySvchost      | svchost.exe  |
+| HTTPRFI                   | decoyApache       | apache2      |
+| HTTPSRFI                  | decoyTomcat       | tomcat8.exe  |
+| SSH BruteForce            | decoySSHD         | sshd.exe/sshd |
+| SQL Injection             | -                 | mysql        |
+| Haraka RCE                | decoyHarakaSMTP   | smtp         |
+| FTP Directory Traversal   | decoyVsftpd       | femitter.exe |
+|                           | decoyFemitter     |              |
 
 ####################
 
