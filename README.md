@@ -46,7 +46,7 @@ It seems like when actions happen which would result in a conflicting observatio
 
 **The remove action**
 
-The remove action was always returned as a successful action, despite whether it actually was or not (see issue 1 in [Debugged Version of CAGE 2 CybORG](*CAGE_2_Fixed/Debugged_CybORG*) - this was fixed). 
+The remove action was always returned as a successful action, despite whether it actually was or not (see issue 1 in [Debugged Version of CAGE 2 CybORG](./Debugged_CybORG) - this was fixed). 
 
 Another intricacy with the remove action seems to be with it only working for specific exploits on specific hosts. This is because the remove action only work if the usernames associated with the ports the exploits were occurring on were ‘root’ or ‘SYSTEM’ then the remove action would fail. This was the case for some exploits, so this means that remove will not always work for every exploit on every host. This may not be a bug, more of feature of the system. But we feel it is still worth mentioning to help understand any behaviour that may not make sense otherwise.
 
