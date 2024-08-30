@@ -111,7 +111,7 @@ Another Cage 2 repo with a few fixes:
     ```
     
 
-1. **Corrected local_port on linux_user_host_image1**
+4. **Corrected local_port on linux_user_host_image1**
     
     The local port number given for the mysql connection was 3389 when it should be 3390. This is the port for an SQL injection attack (3389 is for KeepBlue exploit). If you look at the linux_user_host_image2.yaml, you can see this same connection with local_port 3390.  When the exploit KeepBlue happens on User3 (uses linux_user_host_image1), it always fails when it should only succeed, and this is because of this typo. When I fix it, I can see the the SQLInjection succeeds properly, as hoped.
     
@@ -143,5 +143,84 @@ Another Cage 2 repo with a few fixes:
         Username: root
     ```
     
+5. **Corrected Reward Signal in RedRewardCalculator.py** 
+
+    */CAGE_2_Fixed/Debugged_CybORG/CybORG/CybORG/Shared/RedRewardCalculator.py*
+
+    Reward is calculated based on the number of hosts that the red agent has gained access to. These are determined in the function ```PwnRewardCalculator``` by searching for the username root or system depending on the host distribution. However, certain exploits achieve access using different usernames and therefore more/less is assigned based on the exploit method. To correct this requires specififying the additional usernames as shown below:
+
+    **Initially (~15):**
+    
+    ```python
+      if session['Username'] == 'root' and info['System info']['OSType'] == OperatingSystemType.LINUX:
+          confidentiality_value = self.mapping[self.scenario.get_host(host).get('ConfidentialityValue', 'Low')]
+          root_sessions += confidentiality_value
+          self.compromised_hosts[host] = confidentiality_value
+          break
+
+      if session['Username'] == 'SYSTEM' and info['System info']['OSType'] == OperatingSystemType.WINDOWS:
+          confidentiality_value = self.mapping[self.scenario.get_host(host).get('ConfidentialityValue', 'Low')]
+          system_sessions += confidentiality_value
+          self.compromised_hosts[host] = confidentiality_value
+          break
+    ```
+    
+    **Corrected (~15):**
+    
+    ```python
+
+      usernames = ['NetworkService', 'vagrant', 'root', 'SYSTEM', 'pi',  'www-data']                       
+      if session['Username'] in usernames and info['System info']['OSType'] == OperatingSystemType.LINUX:
+          confidentiality_value = self.mapping[self.scenario.get_host(host).get('ConfidentialityValue', 'Low')]
+          root_sessions += confidentiality_value
+          self.compromised_hosts[host] = confidentiality_value
+          break
+
+      if session['Username'] in usernames and info['System info']['OSType'] == OperatingSystemType.WINDOWS:
+          confidentiality_value = self.mapping[self.scenario.get_host(host).get('ConfidentialityValue', 'Low')]
+          system_sessions += confidentiality_value
+          self.compromised_hosts[host] = confidentiality_value
+          break  
+    ```
+
+6. **Corrected Detection in Blue Observation in BlueTableWrapper.py**
+
+    */CAGE_2_Fixed/Debugged_CybORG/CybORG/CybORG/Agents/Wrappers/BlueTableWrapper.py*
+
+    The BlueTableWrapper sometimes incorrectly classifies a host exploit as a scan, which gives rise to a lower detection rate than the specified 95%. The problem arises from the if-else statement in the wrapper and can be corrected by recognising that in CAGE the presence of port 4444 being open always indicates an exploit::
+
+    **Initially (~15):**
+    
+    ```python
+      if num_connections >= 3 and port_focus >=3:
+          anomaly = 'Scan'
+      elif 4444 in remote_ports:
+          anomaly = 'Exploit'
+      elif num_connections >= 3 and port_focus == 1:
+          anomaly = 'Exploit'
+      elif 'Service Name' in activity[0]:
+          anomaly = 'None'
+      else:
+          anomaly = 'Scan'
+    ```
+    
+    **Corrected (~15):**
+    
+    ```python
+      if 4444 in remote_ports:
+          anomaly = 'Exploit'
+      elif num_connections >= 3 and port_focus >=3:
+          anomaly = 'Scan'
+      elif num_connections >= 3 and port_focus == 1:
+          anomaly = 'Exploit'
+      elif 'Service Name' in activity[0]:
+          anomaly = 'None'
+      else:
+          anomaly = 'Scan'
+    ```
 
 1. **More to add…?**
+
+
+### Active Bugs
+
