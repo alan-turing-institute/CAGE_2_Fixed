@@ -36,10 +36,10 @@ The meander agent, on the other hand, prioritises exploring each subnet before m
 ## Action Space
 
 The blue agent can take one of several actions in each timestep: 
-- analyse a host - reveals with 100% certainty the presence of an exploited host
-- remove host - remove low level access users from a host
-- restore host - remove privliged users from a host
-- place a decoy - set-up a decoy service on a host. If selected the attacker's action will fail.
+- Analyse a host - reveals with 100% certainty the presence of an exploited host
+- Remove host - remove low level access users from a host
+- Restore host - remove privliged users from a host
+- Place a decoy - set-up a decoy service on a host. If selected the attacker's action will fail.
 
 One of the unique features of the CAGE 2 environment is that both agents take actions simultaneously, rather than sequentially. This means that to some degree an agent must attempt to anticipate the actions of its opponent, especially as some actions will have a nullifying effect if they occur at the same time. Below is a list of action priorities should they occur simultaneously:
 
