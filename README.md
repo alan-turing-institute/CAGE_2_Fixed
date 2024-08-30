@@ -17,7 +17,7 @@ The following info is to the best of our knowledge, and if there are intricacies
 ### **True Network Diagram**
 
 <p align="center">
-    <img src="Extras/images/Network_diagram.png" alt="Diagram of the system" width="550"/>
+    <img src="Extras/images/True_Network_Diagram_2.png" alt="Diagram of the system" width="550"/>
     <figcaption style="text-align: center;"><em>Figure 1: CAGE2 CybORG Network Diagram</em></figcaption>
 </p>
 
@@ -72,7 +72,7 @@ The info in the Hosts to Default Processes,Ports and users Mapping Table in the 
 | **Op_host0** | Linux| 22                          | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
 | **Op_host1** | Linux| 22                          | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
 | **Op_host2** | Linux| 22                          | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
-| **Op_Server0** | Linux| 22                        | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
+| **Op_Server** | Linux| 22                        | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
 
 In the decoy order column, the numbers that are after each decoy refer to the ranking of the decoy in the order of priority. The lower the number, the higher the priority and this is hardcoded in the exploit_options dictionary in 
 the `Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/ExploitRemoteService.py` file.
