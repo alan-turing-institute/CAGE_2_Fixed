@@ -150,3 +150,17 @@ the `Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/ExploitRemoteS
 | Op_host1     | 22                 | ROOT               | SSHD                 |
 | Op_host2     | 22                 | ROOT               | SSHD                 |
 | Defender          | 22, 53, 78         | ROOT, SYSTEMD+     | SSHD, SYSTEMD        |
+
+## References
+
+If you use this repository in your research, please cite it as follows:
+
+```bibtex
+@misc{CAGE_2_Fixed,
+  author = {Harry Emerson and Liz Bates},
+  title = {CAGE_2_Fixed},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/liz-b8s/CAGE_2_Fixed}},
+}
