@@ -5,7 +5,7 @@ This repository contains:
 - A debugged version of the CAGE 2 CybORG environment that is compatible with the CAGE 2 challenge
   - [Debugged Version of CAGE 2 CybORG](./Debugged_CybORG)
 - A simple and fast reimplementation of the CAGE 2 CybORG environment
-  - [Mini CAGE 2 Reimplementation](./mini_CAGE)
+  - [Mini CAGE 2 CybORG Reimplementation](./mini_CybORG)
 - Additional information on how the environment works and things we’ve learnt that may be helpful for future users
 
 # Extended CAGE 2 Developer Guide
@@ -15,6 +15,7 @@ This guide extends the previous CAGE 2 developer guide, highlighting features of
 The following info is to the best of our knowledge, and if there are intricacies that we have missed or miswritten then please feel free to contact either of this Repo’s owners and we will discuss and update.
 
 ## Network Diagram
+
 
 ### **True Network Diagram**
 

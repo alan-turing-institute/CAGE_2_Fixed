@@ -1,9 +1,12 @@
 
 # Overview:
 
-```mini_CAGE``` is simplified version of the CAGE 2 environment with a focus on greater execution speed and the added ability to perform parallelisable runs. 
+```mini_CybORG``` is simplified version of the CAGE 2 CybORG environment with a focus on greater execution speed and 
+the 
+added ability to perform parallelisable runs. 
 
-The package mimics the basic reinforcement learning components of the CAGE 2 environment (e.g. state-action space, reward, etc.), but abstracts the bulky files and complex processes, resulting in a streamlined and more accessible framework that retains core functionalities.
+The package mimics the basic reinforcement learning components of the CAGE 2 CybORG environment (e.g. state-action 
+space, reward, etc.), but abstracts the bulky files and complex processes, resulting in a streamlined and more accessible framework that retains core functionalities.
 
 # Usage:
 
@@ -55,26 +58,27 @@ The environment is based off of the most up to date version of [CAGE 2](https://
 
 The simplification and parallelisation of the CAGE environment signficiantly improves the environment execution speed, resulting in almost 1000x acceleration improvement when run on a single CPU. 
 
-| Number of Episodes | CAGE 2 Time (s) | Mini CAGE Time (s) | Improvement |
-| ------------------ | --------------- | ------------------ | ----------- |
-| 1                  | 1.16            | 0.12               | ~15x        |
-| 10                 | 7.52            | 0.12               | ~65x        |
-| 100                | 113.62          | 0.13               | ~950x       |
-| 1000               | 998.87          | 1.35               | ~800x       |  
+| Number of Episodes | CAGE 2 Time (s) | Mini CybORG Time (s) | Improvement |
+| ------------------ | --------------- |----------------------| ----------- |
+| 1                  | 1.16            | 0.12                 | ~15x        |
+| 10                 | 7.52            | 0.12                 | ~65x        |
+| 100                | 113.62          | 0.13                 | ~950x       |
+| 1000               | 998.87          | 1.35                 | ~800x       |  
 
 
 ## Performance:
 
-To confirm the equivalence between the mini_CAGE environment and the CAGE 2 environment, reward was compared across 6 combinations of attacker-defender pairs over 500 epsiodes for 100 timesteps each. +/- indicates the standard error.
+To confirm the equivalence between the mini_CybORG environment and the CAGE 2 environment, reward was compared across 6 
+combinations of attacker-defender pairs over 500 epsiodes for 100 timesteps each. +/- indicates the standard error.
 
-| Attacker | Defender      | CAGE 2 Score | Mini CAGE Score |
-| -------- | ------------- | ------------ | --------------- |
-| B-Line   | React-Restore | -159 +/- 2   | -156 +/ 2       |
-| B-Line   | React-Decoy   | -69 +/- 2    | -68 +/- 2       |
-| B-Line   | Sleep         | -1141 +/- 1  | -1141 +/- 1     |
-| Meander  | React-Restore | -69 +/- 2    | -68 +/- 2       |  
-| Meander  | React-Decoy   | -61 +/- 1    | -63 +/- 1       |
-| Meander  | Sleep         | -1067 +/- 2  | -1067 +/- 1     |
+| Attacker | Defender      | CAGE 2 Score | Mini CybORG Score |
+| -------- | ------------- | ------------ |-------------------|
+| B-Line   | React-Restore | -159 +/- 2   | -156 +/ 2         |
+| B-Line   | React-Decoy   | -69 +/- 2    | -68 +/- 2         |
+| B-Line   | Sleep         | -1141 +/- 1  | -1141 +/- 1       |
+| Meander  | React-Restore | -69 +/- 2    | -68 +/- 2         |  
+| Meander  | React-Decoy   | -61 +/- 1    | -63 +/- 1         |
+| Meander  | Sleep         | -1067 +/- 2  | -1067 +/- 1       |
 
 
 
