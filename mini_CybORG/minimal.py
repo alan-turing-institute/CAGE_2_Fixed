@@ -782,7 +782,7 @@ def update_blue(
 
 
 
-class SimplifiedCAGE:
+class SimplifiedCybORG:
     '''
     A simplified version of the CAGE 2 Challenge environment 
     with faster execution speed and parallelism.

@@ -14,11 +14,11 @@ The only package dependency is ```numpy``` and the environment follows the basic
 
 ```python
 
-from CAGE_2_FIXED.mini_CAGE import (
-    SimplifiedCAGE, Meander_minimal, React_restore_minimal)
+from CAGE_2_FIXED.mini_CybORG import (
+    SimplifiedCybORG, Meander_minimal, React_restore_minimal)
 
 # instantiate the environment
-env = SimplifiedCAGE(num_envs=1)
+env = SimplifiedCybORG(num_envs=1)
 state, info = env.reset()
 
 # instantiate  the agents 
@@ -40,7 +40,38 @@ for i in range(100):
 
 # State-action space:
 
-[Fill this section in...]
+## Enhanced State and Action Space
+
+The state and action space has been expanded from the original CybORG implementation.
+
+- **Blue Agent Observation:**  
+  The blue agent's observation contains the state described in the [extended developer guide](README.md), along with supplementary scanning and decoy information.
+  
+  - **Scanning Information:**  
+    Encoded as a vector, its length equals the number of hosts in the network. The vector logs if a host has been scanned in previous iterations by either the red or green agent.  
+    - If a host is being scanned in the current timestep, the corresponding index is `2`.  
+    - If the host was scanned in prior timesteps, the index is `1`.  
+    - Otherwise, the index is `0`.  
+      
+    **Example:** In a network with three hosts, if `host0` was scanned in the last timestep and `host1` is being scanned in the current timestep, the vector would be `[1, 2, 0]`.
+
+  - **Decoy Information:**  
+    This is also represented as a vector, where each index shows the number of available decoys per host.  
+      
+    **Example:** If `host0`, `host1`, and `host2` have two, three, and zero available decoys, respectively, the vector would be `[2, 3, 0]`.
+
+---
+
+## Simplified Action Space
+
+The action space has been streamlined from the original implementation.
+
+- The actions **'sleep'**, **'restore'**, **'remove'**, and **'analyse'** are retained in this optimized version.
+- However, the individual **'decoy'** actions have been consolidated into a single action for each host. In this version:
+  - The decoy with the highest priority is deployed first, based on the strategy outlined in Table "Decoy Deployment Strategy" from the [extended developer guide](README.md).
+  - Subsequent calls to the decoy action will deploy decoys of progressively lower priority until no decoys remain.
+
+--- 
 
 # Comparison:
 
@@ -56,7 +87,7 @@ The environment is based off of the most up to date version of [CAGE 2](https://
 
 ## Speed:
 
-The simplification and parallelisation of the CAGE environment signficiantly improves the environment execution speed, resulting in almost 1000x acceleration improvement when run on a single CPU. 
+The simplification and parallelisation of the CybORG environment signficiantly improves the environment execution speed, resulting in almost 1000x acceleration improvement when run on a single CPU. 
 
 | Number of Episodes | CAGE 2 Time (s) | Mini CybORG Time (s) | Improvement |
 | ------------------ | --------------- |----------------------| ----------- |
