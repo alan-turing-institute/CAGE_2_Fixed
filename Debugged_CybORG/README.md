@@ -149,7 +149,7 @@ Another Cage 2 repo with a few fixes:
 
     Reward is calculated based on the number of hosts that the red agent has gained access to. These are determined in the function ```PwnRewardCalculator``` by searching for the username root or system depending on the host distribution. However, certain exploits achieve access using different usernames and therefore more/less is assigned based on the exploit method. To correct this requires specififying the additional usernames as shown below:
 
-    **Initially (~15):**
+    **Initially (~52):**
     
     ```python
       if session['Username'] == 'root' and info['System info']['OSType'] == OperatingSystemType.LINUX:
@@ -165,7 +165,7 @@ Another Cage 2 repo with a few fixes:
           break
     ```
     
-    **Corrected (~15):**
+    **Corrected (~55):**
     
     ```python
 
@@ -189,7 +189,7 @@ Another Cage 2 repo with a few fixes:
 
     The BlueTableWrapper sometimes incorrectly classifies a host exploit as a scan, which gives rise to a lower detection rate than the specified 95%. The problem arises from the if-else statement in the wrapper and can be corrected by recognising that in CAGE the presence of port 4444 being open always indicates an exploit::
 
-    **Initially (~15):**
+    **Initially (~171):**
     
     ```python
       if num_connections >= 3 and port_focus >=3:
@@ -204,7 +204,7 @@ Another Cage 2 repo with a few fixes:
           anomaly = 'Scan'
     ```
     
-    **Corrected (~15):**
+    **Corrected (~174):**
     
     ```python
       if 4444 in remote_ports:
@@ -219,8 +219,6 @@ Another Cage 2 repo with a few fixes:
           anomaly = 'Scan'
     ```
 
-1. **More to add…?**
-
-
 ### Active Bugs
 
+If you identify any further bugs, please do raise an issue or make a pull request highlighting the problem.
