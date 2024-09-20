@@ -60,8 +60,6 @@ The state and action space has been expanded from the original CybORG implementa
       
     **Example:** If `host0`, `host1`, and `host2` have two, three, and zero available decoys, respectively, the vector would be `[2, 3, 0]`.
 
----
-
 ## Simplified Action Space
 
 The action space has been streamlined from the original implementation.
@@ -70,8 +68,6 @@ The action space has been streamlined from the original implementation.
 - However, the individual **'decoy'** actions have been consolidated into a single action for each host. In this version:
   - The decoy with the highest priority is deployed first, based on the strategy outlined in Table "Decoy Deployment Strategy" from the [extended developer guide](README.md).
   - Subsequent calls to the decoy action will deploy decoys of progressively lower priority until no decoys remain.
-
---- 
 
 # Comparison:
 
