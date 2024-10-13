@@ -1,5 +1,10 @@
 # CAGE 2 Challenge Environment - Alternate versions
 
+<p align="center">
+    <img src="Extras/images/logo_cyborg.png" alt="Diagram of the system" width="400"/>
+</p>
+
+
 This repository contains:
 
 - A debugged version of the CAGE 2 CybORG environment that is compatible with the CAGE 2 challenge
