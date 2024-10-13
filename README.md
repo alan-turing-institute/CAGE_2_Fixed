@@ -1,9 +1,14 @@
-# CAGE 2 Challenge Environment - Alternate versions
+
+
 
 <p align="center">
     <img src="Extras/images/logo_cyborg.png" alt="Diagram of the system" width="400"/>
 </p>
 
+**CybORG++ is an advanced toolkit for reinforcement learning research focused on autonomous network defense.**
+
+
+Building on the CAGE 2 CybORG environment, it introduces key improvements, including enhanced debugging capabilities, refined agent implementation support, and a streamlined environment that enables faster training and easier customization. Along with addressing several software bugs from its predecessor, CybORG++ introduces MiniCAGE, a lightweight version of CAGE 2, which improves performance dramatically—up to 1000× faster execution in parallel iterations—without sacrificing accuracy or core functionality. 
 
 This repository contains:
 
