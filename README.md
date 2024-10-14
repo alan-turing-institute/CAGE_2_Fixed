@@ -64,7 +64,9 @@ One of the unique features of the CAGE 2 environment is that both agents take ac
 | Escalate           | Remove            | Escalate |
 | Exploit            | Decoy             | Exploit  |
 | Exploit            | Restore           | Exploit  |
-| Escalate           | Restore           | Restore  |
+| Privilege Escalate | Restore           | Restore  |
+
+CHECK THIS
 
 **Method of taking actions**
 
@@ -95,11 +97,17 @@ The blue agent observation space is processed using the Wrappers available in [W
 - [0, 0, 1, 1] = Exploit detected in prior turns
 - [0, 0, 1, 0] = Remove action applied to host (does not indicate successful removal)
 
-Scans and removal actions have 100% chance of being observed in the state, however for exploitation the probability is less clear (see 'Corrected Detection in Blue Observation' in [Bug fixes](./Debugged_CybORG/README.md)). Exploitation actions have a 95% chance of being observed with a few exceptions (details for this can be found in [ExploitAction.py](./Debugged_CybORG/CybORG/CybORG/Shared/Actions/ConcreteActions/ExploitAction.py). SSHBruteForce always has a 100% chance of being observed, consequently an exploit on the OpServer, which can only be exploited using this method, will always be represented in the state. 
+- Double check.
+
+Scans and removal actions have 100% chance of being observed in the state, however for exploitation the probability is less clear. Exploitation actions have a 95% chance of being observed with a few exceptions (details for this can be found in [ExploitAction.py](./Debugged_CybORG/CybORG/CybORG/Shared/Actions/ConcreteActions/ExploitAction.py). SSHBruteForce always has a 100% chance of being observed, consequently an exploit on the OpServer, which can only be exploited using this method, will always be represented in the state. 
+
+- link bug fix above
 
 ## Reward Signal
 
 Reward is assigned based on three conditions: exploiting hosts, restoring hosts and impacting critical hosts. Each host is assigned a numeric value corresponding to its importance (ConfidentialityValue in [Scenario2.yaml](/home/harry/Documents/cyber/BlueTeam/CybORG/CybORG/Shared/Scenarios/Scenario2.yaml)). When a host is exploited this specifies the amount of reward provided: -0.1 for UserHosts and OpHosts, -1 for EntHosts and the OpServer. Using the restore action gives a reward of -1 regardless of which host it is applied to. The only host in which the impact action yields any reward is the OpServer. Allowing this host to be impacted results in a reward of -10. This reward persists until the operational server has been restored and need not be applied in every timestep as the logic of the pre-programmed agents may suggest. The total reward for each timestep is then the sum of exploited host rewards, hosts restored in that timestep and hosts currently being impacted. 
+
+- Reference the bug fixes issue re the reward accumulation.
 
 ### Appendix
 
@@ -121,7 +129,7 @@ Reward is assigned based on three conditions: exploiting hosts, restoring hosts 
 | **Op_Server** | Linux| 22                        | Apache, HarakaSMPT,<br>Tomcat, Vsftpd | Vsftpd - 7 <br> HarakaSMPT - 6 <br> Tomcat - 4 <br> Apache - 3 | SSHBruteForce (port 22) : 0.1 |
 
 In the decoy order column, the numbers that are after each decoy refer to the ranking of the decoy in the order of priority. The lower the number, the higher the priority and this is hardcoded in the exploit_options dictionary in 
-the `Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/ExploitRemoteService.py` file. Decoys with higher priority have a greater probability of being selected when a host is exploited.
+the `Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/ExploitRemoteService.py` file.
 
 ### Exploits to decoy to process mapping table
 
@@ -159,10 +167,10 @@ If you use this repository in your research, please cite it as follows:
 
 ```bibtex
 @misc{CAGE_2_Fixed,
-  author = {Harry Emerson and Liz Bates},
+  author = {Harry Emerson, Liz Bates, Vasilios Mavroudis, Chris Hicks},
   title = {CAGE_2_Fixed},
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/liz-b8s/CAGE_2_Fixed}},
+  howpublished = {\url{https://github.com/alan-turing-institute/CAGE_2_Fixed}},
 }
