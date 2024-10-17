@@ -1,7 +1,7 @@
 
 # Overview:
 
-```mini_CybORG``` is simplified version of the CAGE 2 CybORG environment with a focus on greater execution speed and 
+```mini_CAGE``` is simplified version of the CAGE 2 CybORG environment with a focus on greater execution speed and 
 the 
 added ability to perform parallelisable runs. 
 
@@ -14,11 +14,11 @@ The only package dependency is ```numpy``` and the environment follows the basic
 
 ```python
 
-from CAGE_2_FIXED.mini_CybORG import (
-    SimplifiedCybORG, Meander_minimal, React_restore_minimal)
+from .mini_CAGE import (
+    SimplifiedCAGE, Meander_minimal, React_restore_minimal)
 
 # instantiate the environment
-env = SimplifiedCybORG(num_envs=1)
+env = SimplifiedCAGE(num_envs=1)
 state, info = env.reset()
 
 # instantiate  the agents 
@@ -85,7 +85,7 @@ The environment is based off of the most up to date version of [CAGE 2](https://
 
 The simplification and parallelisation of the CybORG environment signficiantly improves the environment execution speed, resulting in almost 1000x acceleration improvement when run on a single CPU. 
 
-| Number of Episodes | CAGE 2 Time (s) | Mini CybORG Time (s) | Improvement |
+| Number of Episodes | CAGE 2 Time (s) | Mini CAGE Time (s) | Improvement |
 | ------------------ | --------------- |----------------------| ----------- |
 | 1                  | 1.16            | 0.12                 | ~15x        |
 | 10                 | 7.52            | 0.12                 | ~65x        |
@@ -95,10 +95,10 @@ The simplification and parallelisation of the CybORG environment signficiantly i
 
 ## Performance:
 
-To confirm the equivalence between the mini_CybORG environment and the CAGE 2 environment, reward was compared across 6 
+To confirm the equivalence between the mini_CAGE environment and the CAGE 2 environment, reward was compared across 6 
 combinations of attacker-defender pairs over 500 epsiodes for 100 timesteps each. +/- indicates the standard error.
 
-| Attacker | Defender      | CAGE 2 Score | Mini CybORG Score |
+| Attacker | Defender      | CAGE 2 Score | Mini CAGE Score |
 | -------- | ------------- | ------------ |-------------------|
 | B-Line   | React-Restore | -159 +/- 2   | -156 +/ 2         |
 | B-Line   | React-Decoy   | -69 +/- 2    | -68 +/- 2         |

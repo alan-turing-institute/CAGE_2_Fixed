@@ -301,16 +301,14 @@ class Restore_decoys(React_restore_minimal):
 
 if __name__ == '__main__':
         
-    from src.simulation import SimplifiedCybORG
-
-    import random
+    from .minimal import SimplifiedCAGE
 
     seed = 55749 # random.randint(1, 100000)
     np.random.seed(seed)
 
     # initialise environment
     batch_size = 1
-    env = SimplifiedCybORG(num_envs=batch_size, num_nodes=13)
+    env = SimplifiedCAGE(num_envs=batch_size, num_nodes=13)
     s, _ = env.reset()
 
     # initialise the agents 
