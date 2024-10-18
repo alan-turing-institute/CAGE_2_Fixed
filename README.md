@@ -161,9 +161,10 @@ If you use this repository in your research, please cite it as follows:
 ```bibtex
 @misc{CAGE_2_Fixed,
   author = {Harry Emerson, Liz Bates, Vasilios Mavroudis, Chris Hicks},
-  title = {CAGE_2_Fixed},
+  title = {Cyborg++: A Toolkit for Reinforcement Learning Research Focused on Autonomous Network Defense},
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/alan-turing-institute/CAGE_2_Fixed}},
+  howpublished = {\url{git remote set-url origin https://github.com/alan-turing-institute/CybORG_plus_plus
+}},
 }
