@@ -64,17 +64,16 @@ One of the unique features of the CAGE 2 environment is that both agents take ac
 | Escalate           | Remove            | Escalate |
 | Exploit            | Decoy             | Exploit  |
 | Exploit            | Restore           | Exploit  |
-| Privilege Escalate | Restore           | Restore  |
+| Escalate | Restore           | Restore  |
 
-CHECK THIS
 
 **Method of taking actions**
 
 The way actions are taken is not immediately clear. However, on examination it seems as though both the red and blue agents take an action in a single turn both based on the outcome of the state prior to the step.
 
-First the red agent takes an action based on the observation of s_, then the blue agent take an action also based on s_ with no knowledge of the red action that’s just been decided. This means that the blue agent wastes a step potentially as it doesn’t see the outcome of the red action until the next step, where the red could do something like DRS and get a foothold in the next subnet. 
+First the red agent takes an action based on the observation of s, then the blue agent take an action also based on s with no knowledge of the red action that’s just been decided. This means that the blue agent wastes a step potentially as it doesn’t see the outcome of the red action until the next step, where the red could do something like DRS and get a foothold in the next subnet. 
 
-It seems like when actions happen which would result in a conflicting observation space after the step, the blue agent’s action is prioritised. An example is if the red agent tries to privilege escalate a host but the blue agent decides to restore that same host in the same time step. These are mutually exclusive actions but they could both be possible to do according to s_, but we can’t have a host that is both fully compromised and restored, so Blue’s restore action will take priority in a case like this. 
+It seems like when actions happen which would result in a conflicting observation space after the step, the blue agent’s action is prioritised. An example is if the red agent tries to privilege escalate a host but the blue agent decides to restore that same host in the same time step. These are mutually exclusive actions but they could both be possible to do according to s, but we can’t have a host that is both fully compromised and restored, so Blue’s restore action will take priority in a case like this. 
 
 **The Remove Action**
 
@@ -97,17 +96,11 @@ The blue agent observation space is processed using the Wrappers available in [W
 - [0, 0, 1, 1] = Exploit detected in prior turns
 - [0, 0, 1, 0] = Remove action applied to host (does not indicate successful removal)
 
-- Double check.
-
 Scans and removal actions have 100% chance of being observed in the state, however for exploitation the probability is less clear. Exploitation actions have a 95% chance of being observed with a few exceptions (details for this can be found in [ExploitAction.py](./Debugged_CybORG/CybORG/CybORG/Shared/Actions/ConcreteActions/ExploitAction.py). SSHBruteForce always has a 100% chance of being observed, consequently an exploit on the OpServer, which can only be exploited using this method, will always be represented in the state. 
-
-- link bug fix above
 
 ## Reward Signal
 
 Reward is assigned based on three conditions: exploiting hosts, restoring hosts and impacting critical hosts. Each host is assigned a numeric value corresponding to its importance (ConfidentialityValue in [Scenario2.yaml](/home/harry/Documents/cyber/BlueTeam/CybORG/CybORG/Shared/Scenarios/Scenario2.yaml)). When a host is exploited this specifies the amount of reward provided: -0.1 for UserHosts and OpHosts, -1 for EntHosts and the OpServer. Using the restore action gives a reward of -1 regardless of which host it is applied to. The only host in which the impact action yields any reward is the OpServer. Allowing this host to be impacted results in a reward of -10. This reward persists until the operational server has been restored and need not be applied in every timestep as the logic of the pre-programmed agents may suggest. The total reward for each timestep is then the sum of exploited host rewards, hosts restored in that timestep and hosts currently being impacted. 
-
-- Reference the bug fixes issue re the reward accumulation.
 
 ### Appendix
 
