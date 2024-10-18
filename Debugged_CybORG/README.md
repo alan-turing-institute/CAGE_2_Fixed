@@ -6,7 +6,7 @@ Another Cage 2 repo with a few fixes:
 
 1. **Fixed issue with 'Remove' action**: 
     
-    *cage-challenge-2/CybORG/CybORG/Shared/Actions/AbstractActions/Remove.py*
+    *CybORG_plus_plus/Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/Remove.py*
     
     This was only a small issue that indicated (if you checked the action success) that a 'remove' action had succeeded even if no process had actually been removed. The initial version had  obs set to a true observation which would get returned frequently when StopProcess didn't occur.
     
@@ -49,7 +49,7 @@ Another Cage 2 repo with a few fixes:
     
 2. **Corrected port number in DecoyVsftpd**
     
-    *cage-challenge-2/CybORG/CybORG/Shared/Actions/ConcreteActions/DecoyVsftpd.py*
+    *CybORG_plus_plus/Debugged_CybORG/CybORG/CybORG/Shared/Actions/ConcreteActions/DecoyVsftpd.py*
     
     This was a mistake in the port given in the returned Decoy instance. It was initially 80 (DcoyApache) and it should be 21.
     
@@ -77,7 +77,7 @@ Another Cage 2 repo with a few fixes:
     
 3. **Added Process Type in Internal_image.yaml**
     
-    *cage-challenge-2/CybORG/CybORG/Shared/Scenarios/images/Internal_image.yaml*
+    *CybORG_plus_plus/Debugged_CybORG/CybORG/CybORG/Shared/Scenarios/images/Internal_image.yaml*
     
     This Connection was missing a line about the Process Type which was causing the exploit EternalBlue to fail on Enterprise1 (which uses Internal_image.yaml).
     
@@ -145,7 +145,7 @@ Another Cage 2 repo with a few fixes:
     
 5. **Corrected Reward Signal in RedRewardCalculator.py** 
 
-    */CAGE_2_Fixed/Debugged_CybORG/CybORG/CybORG/Shared/RedRewardCalculator.py*
+    */CybORG_plus_plus/Debugged_CybORG/CybORG/CybORG/Shared/RedRewardCalculator.py*
 
     Reward is calculated based on the number of hosts that the red agent has gained access to. These are determined in the function ```PwnRewardCalculator``` by searching for the username root or system depending on the host distribution. However, certain exploits achieve access using different usernames and therefore more/less is assigned based on the exploit method. To correct this requires specififying the additional usernames as shown below:
 
@@ -185,7 +185,7 @@ Another Cage 2 repo with a few fixes:
 
 6. **Corrected Detection in Blue Observation in BlueTableWrapper.py**
 
-    */CAGE_2_Fixed/Debugged_CybORG/CybORG/CybORG/Agents/Wrappers/BlueTableWrapper.py*
+    */CybORG_plus_plus/Debugged_CybORG/CybORG/CybORG/Agents/Wrappers/BlueTableWrapper.py*
 
     The BlueTableWrapper sometimes incorrectly classifies a host exploit as a scan, which gives rise to a lower detection rate than the specified 95%. The problem arises from the if-else statement in the wrapper and can be corrected by recognising that in CAGE the presence of port 4444 being open always indicates an exploit::
 

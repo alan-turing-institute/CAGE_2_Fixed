@@ -159,7 +159,7 @@ the `Debugged_CybORG/CybORG/CybORG/Shared/Actions/AbstractActions/ExploitRemoteS
 If you use this repository in your research, please cite it as follows:
 
 ```bibtex
-@misc{CAGE_2_Fixed,
+@misc{CybORG_plus_plus,
   author = {Harry Emerson, Liz Bates, Vasilios Mavroudis, Chris Hicks},
   title = {Cyborg++: A Toolkit for Reinforcement Learning Research Focused on Autonomous Network Defense},
   year = {2024},
